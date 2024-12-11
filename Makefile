@@ -1,7 +1,20 @@
-CXX=g++
+CXX=nvcc
 CXXFLAGS=-std=c++11 -O3
+SRCS = a3.cpp a3.cu
+OBJS = a3.o a3_cuda.o
 
-all: a3
+TARGET = a3
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJS)
+
+a3.o: a3.cpp
+	$(CXX) $(CXXFLAGS) -x cu -dc $< -o $@
+
+a3_cuda.o: a3.cu
+	$(CXX) $(CXXFLAGS) -dc $< -o $@
 
 clean:
-	rm -rf a3
+	rm -f $(OBJS) $(TARGET)
